@@ -87,19 +87,21 @@ public class GameUIManager : MonoBehaviour
         }
     }
 
-    public void ShowLevelCompleteScreen() // Method to show the Level Complete screen
+    public void ShowLevelCompleteScreen()
     {
-        levelCompleteScreen.SetActive(true);  // Display Level Complete screen
-        gameOverScreen.SetActive(false);      // Hide Game Over screen
-        
-        // Stop the gameplay music
-        if (gameplayMusic != null)
+        Debug.Log("Level Complete Screen Triggered");
+        levelCompleteScreen.SetActive(true);  // Show the Level Complete screen
+        gameOverScreen.SetActive(false);      // Hide the Game Over screen
+        restartButton.gameObject.SetActive(true); // Show the restart button
+
+        if (gameplayMusic != null && gameplayMusic.isPlaying)
         {
-            gameplayMusic.Stop();
+            gameplayMusic.Stop();  // Stop the gameplay music
         }
 
         Time.timeScale = 0; // Pause the game
     }
+
 
     public void RestartGame() //Method to Restart the game
     {
@@ -111,6 +113,7 @@ public class GameUIManager : MonoBehaviour
         gameActive = true; // Set game to active
         FindObjectOfType<GameTimer>().ResetTimer(); // Reset the game timer component
         FindObjectOfType<PlayerController>().ResetPlayer(); // Reset the player state
+        restartButton.gameObject.SetActive(false); // Hide the restart button during the game
         ShowStartScreen(); // Show the Start Screen
     }
 
