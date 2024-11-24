@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     public GameObject bonePrefab; // Bone prefab to be thrown
     public Transform boneSpawnPoint; // Point where bones are spawned
     public int boneCount = 10; // Initial number of bones
+    public float boneSpeed = 10f; // Base speed of the bone
+    public float maxBoneSpeed = 20f; // Maximum allowed speed
+    public float minBoneSpeed = 5f; // Minimum allowed speed
     public TMP_Text boneCountText; // UI element to display remaining bones
     public TMP_Text livesCountText; // UI element to display remaining lives
     public int lives = 3; // Player lives
@@ -78,8 +81,37 @@ public class PlayerController : MonoBehaviour
     {
         if (boneCount > 0)
         {
+            // Get mouse position in world space if using a mouse for direction
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 throwDirection = (mousePosition - boneSpawnPoint.position).normalized;
+
+            // If not using mouse, adjust throw direction with controller input
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                throwDirection = Vector2.up;
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                throwDirection = Vector2.down;
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                throwDirection = Vector2.left;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                throwDirection = Vector2.right;
+            }
+
+            // Adjust bone speed based on a modifier key (e.g., shift for fast throw)
+            float currentBoneSpeed = boneSpeed;
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                currentBoneSpeed = Mathf.Clamp(currentBoneSpeed * 1.5f, minBoneSpeed, maxBoneSpeed);
+            }
+
             // Spawn the bone at the spawn point
-            GameObject bone = Instantiate(bonePrefab, boneSpawnPoint.position, transform.rotation);
+            GameObject bone = Instantiate(bonePrefab, boneSpawnPoint.position, Quaternion.identity);
 
             // Add Rigidbody2D for movement
             Rigidbody2D rb = bone.GetComponent<Rigidbody2D>();
@@ -87,7 +119,9 @@ public class PlayerController : MonoBehaviour
             {
                 rb = bone.AddComponent<Rigidbody2D>();
             }
-            rb.velocity = transform.right * 10f; // Forward direction
+
+            // Apply velocity based on calculated throw direction
+            rb.velocity = throwDirection * currentBoneSpeed;
 
             // Add Collider2D if not already on the bonePrefab
             Collider2D collider = bone.GetComponent<Collider2D>();
@@ -113,6 +147,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("No bones left to throw!");
         }
     }
+
 
 
     void UpdateBoneCountUI()
