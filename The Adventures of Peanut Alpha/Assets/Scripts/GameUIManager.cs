@@ -12,6 +12,8 @@ public class GameUIManager : MonoBehaviour
     public GameObject gameOverScreen;        // Reference to the Game Over screen UI
     public TextMeshProUGUI gameOverMessage; // Reference to the Game Over message text
     public GameObject levelCompleteScreen;   // Reference to the Level Complete screen UI
+    public AudioSource themeMusic;           // Reference to the theme music AudioSource
+    public AudioSource gameplayMusic;        // Reference to the gameplay music AudioSource
     public Button restartButton;             // Reference to the restart button
     public bool gameActive = false;          // Track if the game is active
     public float levelTime = 60f;            // Desired level time
@@ -32,6 +34,16 @@ public class GameUIManager : MonoBehaviour
         restartButton.gameObject.SetActive(false); // Hide the restart button
         Time.timeScale = 0; // Pauses the game until the start button is clicked
         gameActive = false; //Mark the game as inactive
+
+        if (themeMusic != null && !themeMusic.isPlaying)
+        {
+            themeMusic.Play();  // Play the theme music
+        }
+
+        if (gameplayMusic != null && gameplayMusic.isPlaying)
+        {
+            gameplayMusic.Stop();  // Stop gameplay music, just in case
+        }
     }
 
     public void StartGame() // Method to start the same
@@ -44,6 +56,16 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 1; // Unpauses the game
         gameActive = true; // Start the game
         currentTime = levelTime; // Reset the timer
+
+        if (themeMusic != null && themeMusic.isPlaying)
+        {
+            themeMusic.Stop();  // Stop the theme music when the game starts
+        }
+
+        if (gameplayMusic != null)
+        {
+            gameplayMusic.Play();  // Start the gameplay music
+        }
     }
 
     public void ShowGameOverScreen() // Method to show the Game Over screen
@@ -57,6 +79,11 @@ public class GameUIManager : MonoBehaviour
         if (gameOverMessage != null)
         {
             gameOverMessage.text = "Game Over"; // Set the Game Over message text
+        }
+
+        if (gameplayMusic != null && gameplayMusic.isPlaying)
+        {
+            gameplayMusic.Stop();  // Stop gameplay music
         }
     }
 
