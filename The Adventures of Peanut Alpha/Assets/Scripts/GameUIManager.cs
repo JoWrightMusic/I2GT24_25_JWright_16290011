@@ -91,6 +91,13 @@ public class GameUIManager : MonoBehaviour
     {
         levelCompleteScreen.SetActive(true);  // Display Level Complete screen
         gameOverScreen.SetActive(false);      // Hide Game Over screen
+        
+        // Stop the gameplay music
+        if (gameplayMusic != null)
+        {
+            gameplayMusic.Stop();
+        }
+
         Time.timeScale = 0; // Pause the game
     }
 
