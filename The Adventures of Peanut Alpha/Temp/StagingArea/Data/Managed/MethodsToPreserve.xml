@@ -1,0 +1,12 @@
+<linker>
+	<assembly fullname="Assembly-CSharp" ignoreIfMissing="1">
+		<type fullname="GameUIManager">
+			<method name="RestartGame"/>
+			<method name="RestartGame"/>
+			<method name="RestartGame"/>
+			<method name="RestartGame"/>
+			<method name="StartGame"/>
+			<method name="StartGame"/>
+		</type>
+	</assembly>
+</linker>
