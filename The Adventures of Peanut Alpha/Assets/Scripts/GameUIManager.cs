@@ -115,6 +115,8 @@ public class GameUIManager : MonoBehaviour
         FindObjectOfType<PlayerController>().ResetPlayer(); // Reset the player state
         restartButton.gameObject.SetActive(false); // Hide the restart button during the game
         ShowStartScreen(); // Show the Start Screen
+
+
     }
 
     public void SetGameActive(bool isActive)  //Method to set the game state
